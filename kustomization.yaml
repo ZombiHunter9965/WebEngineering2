@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  - ingress.yaml
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: argocd-cm
+    path: argocd-cm-patch.yaml
+  - target:
+      kind: ConfigMap
+      name: argocd-cmd-params-cm
+    path: argocd-cmd-params-cm-patch.yaml
+  - target:
+      kind: ConfigMap
+      name: argocd-rbac-cm
+    path: argocd-rbac-cm-patch.yaml
+  - target:
+      kind: Deployment
+      name: argocd-repo-server
+    path: disable-gpg-patch.yaml
+
+namespace: argocd
